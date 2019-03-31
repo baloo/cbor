@@ -94,36 +94,63 @@
 //! Read a CBOR value that is known to be a map of string keys to string values and print it.
 //!
 //! ```rust
+//! # #[cfg(feature = "std")]
 //! use std::collections::BTreeMap;
+//! # #[cfg(feature = "std")]
 //! use serde_cbor::from_slice;
 //!
+//! # #[cfg(feature = "std")]
+//! # fn main() {
 //! let slice = b"\xa5aaaAabaBacaCadaDaeaE";
 //! let value: BTreeMap<String, String> = from_slice(slice).unwrap();
 //! println!("{:?}", value); // {"e": "E", "d": "D", "a": "A", "c": "C", "b": "B"}
+//! # }
+//!
+//! # #[cfg(not(feature = "std"))]
+//! # fn main() {
+//! # }
+//!
 //! ```
 //!
 //! Read a general CBOR value with an unknown content.
 //!
 //! ```rust
+//! # #[cfg(feature = "std")]
 //! use serde_cbor::{from_slice, Value};
 //!
+//! # #[cfg(feature = "std")]
+//! # fn main() {
 //! let slice = b"\x82\x01\xa1aaab";
 //! let value: Value = from_slice(slice).unwrap();
 //! println!("{:?}", value); // Array([U64(1), Object({String("a"): String("b")})])
+//! # }
+//!
+//! # #[cfg(not(feature = "std"))]
+//! # fn main() {
+//! # }
 //! ```
 //!
 //! Serialize an object.
 //!
 //! ```rust
+//! # #[cfg(feature = "std")]
 //! use std::collections::BTreeMap;
+//! # #[cfg(feature = "std")]
 //! use serde_cbor::to_vec;
 //!
+//! # #[cfg(feature = "std")]
+//! # fn main() {
 //! let mut programming_languages = BTreeMap::new();
 //! programming_languages.insert("rust", vec!["safe", "concurrent", "fast"]);
 //! programming_languages.insert("python", vec!["powerful", "friendly", "open"]);
 //! programming_languages.insert("js", vec!["lightweight", "interpreted", "object-oriented"]);
 //! let encoded = to_vec(&programming_languages);
 //! assert_eq!(encoded.unwrap().len(), 103);
+//! # }
+//!
+//! # #[cfg(not(feature = "std"))]
+//! # fn main() {
+//! # }
 //! ```
 //!
 //! Serializing a `Vec` as a specialized byte string uses about 2x less RAM and
@@ -132,10 +159,14 @@
 //! ```rust
 //! # extern crate serde_bytes;
 //! # extern crate serde_cbor;
+//! # #[cfg(feature = "std")]
 //! use std::collections::BTreeMap;
+//! # #[cfg(feature = "std")]
 //! use serde_bytes::ByteBuf;
+//! # #[cfg(feature = "std")]
 //! use serde_cbor::to_vec;
 //!
+//! # #[cfg(feature = "std")]
 //! # fn main() {
 //! let data: Vec<u8> = vec![0, 1, 255];
 //! let serialized_array = to_vec(&data).unwrap();
@@ -143,13 +174,18 @@
 //! let serialized_byte_string = to_vec(&byte_buf).unwrap();
 //! assert!(serialized_byte_string.len() < serialized_array.len());
 //! # }
+//!
+//! # #[cfg(not(feature = "std"))]
+//! # fn main() {
+//! # }
 //! ```
 //!
 //! Deserializing data in the middle of a slice
-//! ```
+//! ```rust
 //! # extern crate serde_cbor;
 //! use serde_cbor::Deserializer;
 //!
+//! # #[cfg(feature = "std")]
 //! # fn main() {
 //! let data: Vec<u8> = vec![
 //!     0x66, 0x66, 0x6f, 0x6f, 0x62, 0x61, 0x72, 0x66, 0x66, 0x6f, 0x6f, 0x62,
@@ -161,6 +197,10 @@
 //! let rest = &data[deserializer.byte_offset()..];
 //! assert_eq!(value, "foobar");
 //! assert_eq!(rest, &[0x66, 0x66, 0x6f, 0x6f, 0x62, 0x61, 0x72]);
+//! # }
+//!
+//! # #[cfg(not(feature = "std"))]
+//! # fn main() {
 //! # }
 //! ```
 //!
